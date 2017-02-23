@@ -1,6 +1,8 @@
 package edu.washington.ksf7.awty;
 
-import android.support.annotation.Nullable;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,25 +15,6 @@ public class MainActivity extends AppCompatActivity {
 
     final static String TAG = "MainActivity";
 
-    public enum ExecutionStatus {
-        STARTED,
-        STOPPED
-    }
-
-    public ExecutionStatus executionStatus = ExecutionStatus.STOPPED;
-
-    public ExecutionStatus getExecutionStatus() {
-        return executionStatus;
-    }
-
-    public void startService() {
-        executionStatus = ExecutionStatus.STARTED;
-    }
-
-    public void stopService() {
-        executionStatus = ExecutionStatus.STOPPED;
-    }
-
     //----------------------------------------------------------------------------------------------
     // Implementation
     //----------------------------------------------------------------------------------------------
@@ -42,14 +25,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setupViews();
+
+        Intent startAWTYReceiver = new Intent(this, AWTYBroadcastReceiver.class);
+
+
     }
 
     private void setupViews() {
-
         findViewById(R.id.awty_start_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (getExecutionStatus()) {
+                switch (AWTYBroadcastReceiver.getExecutionStatus()) {
                     case STARTED:
                         stop();
                         break;
@@ -60,13 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void clicked() {
-        // disable button
-        // check state
-        // if stopped -> start
-        // if started -> stop
     }
 
     private void attemptToStart() {
@@ -115,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateStartButton() {
         String buttonText;
 
-        ExecutionStatus executionStatus = getExecutionStatus();
+        AWTYBroadcastReceiver.ExecutionStatus executionStatus = AWTYBroadcastReceiver.getExecutionStatus();
 
         switch (executionStatus) {
             case STARTED:
@@ -135,16 +114,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void start(String messageText, String phoneNumber, int interval) {
-        startService();
+        String message = "Texting " + phoneNumber + ": " + messageText;
+
+        AWTYBroadcastReceiver.startService(this, message, interval);
 
         // update button text
         updateStartButton();
-        String message = phoneNumber + ": " + messageText;
         Log.d(TAG, "Starting with " + message);
     }
 
     private void stop() {
-        stopService();
+        AWTYBroadcastReceiver.stopService();
 
         // update button text
         updateStartButton();
