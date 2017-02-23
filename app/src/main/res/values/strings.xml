@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">AWTY</string>
+    <string name="awty_text_intro">Ugh…are we there yet? Let\'s just keep asking until we find out!</string>
+
+    <string name="awty_labeltext_message">Message</string>
+    <string name="awty_labeltext_phone_number">Phone #</string>
+    <string name="awty_labeltext_interval">Minute Interval</string>
+
+    <string name="awty_button_text_start">Start</string>
+    <string name="awty_button_text_stop">Stop</string>
 </resources>
