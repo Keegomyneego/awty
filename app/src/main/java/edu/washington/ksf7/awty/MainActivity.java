@@ -25,10 +25,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setupViews();
-
-        Intent startAWTYReceiver = new Intent(this, AWTYBroadcastReceiver.class);
-
-
     }
 
     private void setupViews() {
@@ -113,14 +109,12 @@ public class MainActivity extends AppCompatActivity {
         ((Button) findViewById(R.id.awty_start_button)).setText(buttonText);
     }
 
-    private void start(String messageText, String phoneNumber, int interval) {
-        String message = "Texting " + phoneNumber + ": " + messageText;
+    private void start(String message, String phoneNumber, int interval) {
 
-        AWTYBroadcastReceiver.startService(this, message, interval);
+        AWTYBroadcastReceiver.startService(this, phoneNumber, message, interval);
 
         // update button text
         updateStartButton();
-        Log.d(TAG, "Starting with " + message);
     }
 
     private void stop() {
@@ -128,6 +122,5 @@ public class MainActivity extends AppCompatActivity {
 
         // update button text
         updateStartButton();
-        Log.d(TAG, "Stopping");
     }
 }
